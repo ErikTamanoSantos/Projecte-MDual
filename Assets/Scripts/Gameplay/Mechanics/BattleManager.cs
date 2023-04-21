@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -29,8 +30,10 @@ public class BattleManager : MonoBehaviour
                 StartBattle();
                 break;
             case GameState.BattleWon:
+                SceneManager.LoadScene("MapScene");
                 break;
             case GameState.BattleLost:
+                SceneManager.LoadScene("MapScene");
                 break;
         }
     }
@@ -43,6 +46,7 @@ public class BattleManager : MonoBehaviour
         playerUnits.Remove(unit);
         if (playerUnits.Count == 0) {
             GameManager.Instance.UpdateGameState(GameState.BattleLost);
+            Debug.Log("LOSE");
         }
     }
 
@@ -50,6 +54,7 @@ public class BattleManager : MonoBehaviour
         enemyUnits.Remove(unit);
         if (enemyUnits.Count == 0) {
             GameManager.Instance.UpdateGameState(GameState.BattleWon);
+            Debug.Log("WIN");
         }
     }
 
