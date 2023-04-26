@@ -11,10 +11,6 @@ public class MapTile : MonoBehaviour
 
     private bool occupied;
 
-    public void Init(bool isOffset) {
-        renderer.color = isOffset ? offsetColor : baseColor;
-    }
-
     private void OnMouseEnter() {
         highlight.SetActive(true);
     }

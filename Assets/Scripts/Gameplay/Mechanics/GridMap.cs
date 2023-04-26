@@ -9,17 +9,12 @@ public class GridMap : MonoBehaviour
     [SerializeField] private MapTile tilePrefab;
     [SerializeField] private Transform cam;
     [SerializeField] private GameObject character;
-
-    private Dictionary<Vector2, MapTile> tiles;
-
     public static GridMap Instance;
-
-    private static Vector2 characterPos = new Vector2(3, 2);
 
     void Awake() {
         Instance = this;
         GenerateGrid();
-        character.transform.position = new Vector3(characterPos.x, characterPos.y, -1);
+        character.transform.position = new Vector3(GameData.Map_CharacterPos.x, GameData.Map_CharacterPos.y, -1);
 
         
     }
@@ -29,22 +24,19 @@ public class GridMap : MonoBehaviour
     }
 
     void GenerateGrid() {
-        tiles = new Dictionary<Vector2, MapTile>();
-        for (int y = 2; y < 8; y++) {
-            var spawnedTile = Instantiate(tilePrefab, new Vector3(3, y), Quaternion.identity);
-            spawnedTile.name = $"Tile {0} {y}";
-            spawnedTile.setPosition(new Vector2(3, y));
-            tiles[new Vector2(3, y)] = spawnedTile;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (GameData.Map_CurrentLayout[x, y] != MapTileType.blocked) {
+                    var spawnedTile = Instantiate(tilePrefab, new Vector3(x, y), Quaternion.identity);
+                    spawnedTile.name = $"Tile {x} {y}";
+
+
+                    spawnedTile.setPosition(new Vector2(x, y));
+                }
+            }
         }
 
-        cam.transform.position = new Vector3((float) width/2 -0.5f, (float) height/2 -0.5f, -10);
-    }
-
-    public MapTile getTile(Vector2 pos) {
-        if (tiles.TryGetValue(pos, out var tile)) {
-            return tile;
-        }
-        return null;
+        cam.transform.position = new Vector3((float) width/2 + 2.5f, (float) height/2 -0.5f, -10);
     }
 
     public int getWidth()
@@ -60,32 +52,35 @@ public class GridMap : MonoBehaviour
     public void move(Directions dir) {
         switch (dir) {
             case Directions.up:
-                if (tiles.ContainsKey(new Vector2(characterPos.x, characterPos.y + 1))) {
-                    characterPos = new Vector2(characterPos.x, characterPos.y + 1);
+                if ((int) GameData.Map_CharacterPos.y + 1 < height && GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y + 1] != MapTileType.blocked) {
+                    GameData.Map_CharacterPos = new Vector2(GameData.Map_CharacterPos.x, GameData.Map_CharacterPos.y + 1);
                     character.transform.position = new Vector3(character.transform.position.x, character.transform.position.y + 1, -1);
                 }
                 break;
             case Directions.down:
-                if (tiles.ContainsKey(new Vector2(characterPos.x, characterPos.y - 1))) {
-                    characterPos = new Vector2(characterPos.x, characterPos.y - 1);
+                if ((int) GameData.Map_CharacterPos.y - 1 > -1 && GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y - 1] != MapTileType.blocked) {
+                    GameData.Map_CharacterPos = new Vector2(GameData.Map_CharacterPos.x, GameData.Map_CharacterPos.y - 1);
                     character.transform.position = new Vector3(character.transform.position.x, character.transform.position.y - 1, -1);
                 }
                 break;
             case Directions.left:
-                if (tiles.ContainsKey(new Vector2(characterPos.x - 1, characterPos.y))) {
-                    characterPos = new Vector2(characterPos.x - 1, characterPos.y);
+                if ((int) GameData.Map_CharacterPos.x - 1 > -1 && GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x - 1, (int) GameData.Map_CharacterPos.y] != MapTileType.blocked) {
+                    GameData.Map_CharacterPos = new Vector2(GameData.Map_CharacterPos.x - 1, GameData.Map_CharacterPos.y);
                     character.transform.position = new Vector3(character.transform.position.x - 1, character.transform.position.y, -1);
                 }
                 break;
             case Directions.right:
-                if (tiles.ContainsKey(new Vector2(characterPos.x + 1, characterPos.y))) {
-                    characterPos = new Vector2(characterPos.x + 1, characterPos.y);
+                if ( (int) GameData.Map_CharacterPos.x + 1 < width && GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x + 1, (int) GameData.Map_CharacterPos.y] != MapTileType.blocked) {
+                    GameData.Map_CharacterPos = new Vector2(GameData.Map_CharacterPos.x + 1, GameData.Map_CharacterPos.y);
                     character.transform.position = new Vector3(character.transform.position.x + 1, character.transform.position.y, -1);
                 }
                 break;
         }
 
-        if (characterPos == new Vector2(3, 7)) {
+        Debug.Log("x " +GameData.Map_CharacterPos.x);
+        Debug.Log("y " +GameData.Map_CharacterPos.y);
+
+        if (GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] == MapTileType.battle) {
             SceneManager.LoadScene("BattleScene");
         }
     }

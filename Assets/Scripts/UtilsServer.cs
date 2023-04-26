@@ -16,7 +16,6 @@ public class UtilsServer : MonoBehaviour
     IEnumerator Upload()
     {
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        formData.Add();
 
         UnityWebRequest www = UnityWebRequest.Post(url, formData);
         yield return www.SendWebRequest();
