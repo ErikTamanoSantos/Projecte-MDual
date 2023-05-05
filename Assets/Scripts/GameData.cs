@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class GameData : MonoBehaviour
+public class GameData
 {
     // MAP DATA
     public static Vector2 Map_CharacterPos = new Vector2(3, 2);
@@ -24,7 +24,7 @@ public class GameData : MonoBehaviour
         */
     
     public static MapTileType[,] Map_CurrentLayout = new MapTileType[,] {
-        {MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable},
+        {MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.battle, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable},
         {MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable},
         {MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable},
         {MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable, MapTileType.walkable},
@@ -37,7 +37,14 @@ public class GameData : MonoBehaviour
     };
     // PARTY DATA
     public static CharacterData[] Party_ActiveParty = new CharacterData[7] {new CharacterData("test", 1, 1, 1, 1, 1, 1, 1, 1), null, null, null, null, null, null};
-    public static ArrayList Party_InactiveParty = new ArrayList();
+    public static List<CharacterData> Party_InactiveParty = new List<CharacterData>();
+
+    //EQUIPMENT DATA
+    public static List<HeadEquipment> Equipment_UnusedHeadEq = new List<HeadEquipment>();
+    public static List<ChestEquipment> Equipment_UnusedChestEq = new List<ChestEquipment>();
+    public static List<LegsEquipment> Equipment_UnusedLegsEq = new List<LegsEquipment>();
+    public static List<FeetEquipment> Equipment_UnusedFeetEq = new List<FeetEquipment>();
+    public static int Equipment_pageIndex = 0;
 }
 
 public enum MapTileType

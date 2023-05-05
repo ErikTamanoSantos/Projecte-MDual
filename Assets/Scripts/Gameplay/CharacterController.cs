@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
+    CharacterData data;
     [SerializeField] private int maxHP;
     [SerializeField] private int maxMP;
     [SerializeField] private int baseATK;
