@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System;
 using TMPro;
 
-public class PartyMenuController : MonoBehaviour
+public class EquipmentMenu : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI characterName;
     // Start is called before the first frame update

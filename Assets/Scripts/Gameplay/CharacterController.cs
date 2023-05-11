@@ -43,10 +43,13 @@ public class CharacterController : MonoBehaviour
     private Direction facingDirection;
 
     private bool isPressed = false;
+
+    private Animator playerAnim;
     
     // Start is called before the first frame update
     void Start()
     {
+        playerAnim = GetComponent<Animator>();
         for (int x = 0; x < GridManager.Instance.getWidth(); x++) {
             for (int y = 0; y < GridManager.Instance.getHeight(); y++) {
                 Tile curTile = GridManager.Instance.getTile(new Vector2(x, y));
@@ -82,6 +85,7 @@ public class CharacterController : MonoBehaviour
             switch (characterState)
             {
                 case CharacterState.standby:
+                    playerAnim.SetBool("Attacking", false);
                     if (target == null) 
                     {
                         List<CharacterController> targets;
@@ -149,18 +153,8 @@ public class CharacterController : MonoBehaviour
                     }
                     break;
                 case CharacterState.attacking:
-                    if (target.currentHP <= 0) {
-                        changeState(CharacterState.standby);
-                    } else if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                        changeState(CharacterState.walking);
-                    } else if (Time.time >= timeToAttack) {
-                        target.takeDMG(currentATK);
-                        if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                            changeState(CharacterState.walking);
-                        } else {
-                            timeToAttack = Time.time + 1/currentATKSPD;
-                        }
-                    }
+                    // Wait for the current animation to finish
+                    playerAnim.SetBool("Attacking", true);
                     break;
                 case CharacterState.dead:
                     if (side == Side.player) {
@@ -235,6 +229,21 @@ public class CharacterController : MonoBehaviour
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public void Attack() {
+        if (target.currentHP <= 0) {
+            changeState(CharacterState.standby);
+        } else if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
+            changeState(CharacterState.walking);
+        } else if (Time.time >= timeToAttack) {
+            target.takeDMG(currentATK);
+            if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
+                changeState(CharacterState.walking);
+            } else {
+                timeToAttack = Time.time + 1/currentATKSPD;
+            }
+        }
     }
 }
 
