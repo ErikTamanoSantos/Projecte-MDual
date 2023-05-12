@@ -13,6 +13,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private float baseATKSPD;
     [SerializeField] private float baseMOVSPD;
     [SerializeField] private int baseRange;
+    [SerializeField] private int BattleOrder;
 
     private int currentHP;
     private int currentMP;
@@ -37,10 +38,7 @@ public class CharacterController : MonoBehaviour
 
     private float timeToAttack;
 
-    private List<Tile> route = new List<Tile>();
-
-    private Dictionary<Tile, bool> possibleTile = new Dictionary<Tile, bool>();
-    private Direction facingDirection;
+    private int orderPosition;
 
     private bool isPressed = false;
 
@@ -50,12 +48,12 @@ public class CharacterController : MonoBehaviour
     void Start()
     {
         playerAnim = GetComponent<Animator>();
-        for (int x = 0; x < GridManager.Instance.getWidth(); x++) {
-            for (int y = 0; y < GridManager.Instance.getHeight(); y++) {
-                Tile curTile = GridManager.Instance.getTile(new Vector2(x, y));
-                possibleTile.Add(curTile, !curTile.isOccupied());
-            }
-        }
+        // for (int x = 0; x < GridManager.Instance.getWidth(); x++) {
+        //     for (int y = 0; y < GridManager.Instance.getHeight(); y++) {
+        //         Tile curTile = GridManager.Instance.getTile(new Vector2(x, y));
+        //         possibleTile.Add(curTile, !curTile.isOccupied());
+        //     }
+        // }
 
         currentHP = maxHP;
         currentMP = maxMP;
@@ -65,17 +63,6 @@ public class CharacterController : MonoBehaviour
         currentMOVSPD = baseMOVSPD;
         currentRange = baseRange;
         changeState(CharacterState.standby);
-        if (side == 0) {
-            BattleManager.Instance.addPlayerUnit(this);
-            position = new Vector2(14, 8);
-            GridManager.Instance.getTile(new Vector2(14, 8)).setOccupied(true);
-            this.transform.position = GridManager.Instance.getTile(new Vector2(14, 8)).transform.position;
-        } else {
-            BattleManager.Instance.addEnemyUnit(this);
-            position = new Vector2(15, 8);
-            GridManager.Instance.getTile(new Vector2(15, 8)).setOccupied(true);
-            this.transform.position = GridManager.Instance.getTile(new Vector2(15, 8)).transform.position;
-        }
     }
 
     // Update is called once per frame
@@ -86,72 +73,72 @@ public class CharacterController : MonoBehaviour
             {
                 case CharacterState.standby:
                     playerAnim.SetBool("Attacking", false);
-                    if (target == null) 
-                    {
-                        List<CharacterController> targets;
-                        if (side == 0) {
-                            targets = BattleManager.Instance.getEnemyUnits();
-                        } else {
-                            targets = BattleManager.Instance.getPlayerUnits();
-                        }
-                        for (int i = 0; i < targets.Count; i++) {
-                            if (
-                                target == null || 
-                                Vector3.Distance(this.transform.position, target.transform.position) > Vector3.Distance(this.transform.position, targets[i].transform.position)) 
-                                {
-                                    target = targets[i];
-                            }
-                        }
-                        if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                            if (this.position.y < target.getPosition().y) {
-                            bool pathFound = false;
-                            while (pathFound) {
-                                if (route.Count == 0) {
+                    // if (target == null) 
+                    // {
+                    //     List<CharacterController> targets;
+                    //     if (side == 0) {
+                    //         targets = BattleManager.Instance.getEnemyUnits();
+                    //     } else {
+                    //         targets = BattleManager.Instance.getPlayerUnits();
+                    //     }
+                    //     for (int i = 0; i < targets.Count; i++) {
+                    //         if (
+                    //             target == null || 
+                    //             Vector3.Distance(this.transform.position, target.transform.position) > Vector3.Distance(this.transform.position, targets[i].transform.position)) 
+                    //             {
+                    //                 target = targets[i];
+                    //         }
+                    //     }
+                    //     if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
+                    //         if (this.position.y < target.getPosition().y) {
+                    //         bool pathFound = false;
+                    //         while (pathFound) {
+                    //             if (route.Count == 0) {
 
-                                    if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x, this.position.y + (this.position.y > target.getPosition().y ? -1 : 1)))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, this.position.y + (this.position.y > target.getPosition().y ? -1 : 1))));
-                                    } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y)));
-                                    } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y)));
-                                    } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, (this.position.y > target.getPosition().y ? 1 : -1))));
-                                    }
+                    //                 if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x, this.position.y + (this.position.y > target.getPosition().y ? -1 : 1)))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, this.position.y + (this.position.y > target.getPosition().y ? -1 : 1))));
+                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y)));
+                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y)));
+                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, (this.position.y > target.getPosition().y ? 1 : -1))));
+                    //                 }
                                     
-                                } else if(route[route.Count-1].getPosition().x - target.getPosition().x + route[route.Count-1].getPosition().y - target.getPosition().y < baseRange) {
-                                    changeState(CharacterState.walking);
-                                    pathFound = true;
-                                } else {
-                                    if (possibleTile[GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].getPosition().y > target.getPosition().y ? -1 : 1)))]) {
-                                        /*if (GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].position.y > target.getPosition().y ? -1 : 1))).Equals(route[route.Count - 1])) {
-                                            possibleTile[GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].position.y > target.getPosition().y ? -1 : 1)))] = false;
+                    //             } else if(route[route.Count-1].getPosition().x - target.getPosition().x + route[route.Count-1].getPosition().y - target.getPosition().y < baseRange) {
+                    //                 changeState(CharacterState.walking);
+                    //                 pathFound = true;
+                    //             } else {
+                    //                 if (possibleTile[GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].getPosition().y > target.getPosition().y ? -1 : 1)))]) {
+                    //                     /*if (GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].position.y > target.getPosition().y ? -1 : 1))).Equals(route[route.Count - 1])) {
+                    //                         possibleTile[GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].position.y > target.getPosition().y ? -1 : 1)))] = false;
                                             
-                                        } else {
-                                        }*/
-                                    } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y)));
-                                    } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y)));
-                                    } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                                        route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, (this.position.y > target.getPosition().y ? 1 : -1))));
-                                    }
-                                }
-                            }   
-                        }
-                            changeState(CharacterState.walking);
-                        } else {
-                            timeToAttack = Time.time + 1/currentATKSPD;
-                            changeState(CharacterState.attacking);
-                        }
-                    }
+                    //                     } else {
+                    //                     }*/
+                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y)));
+                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y)));
+                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
+                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, (this.position.y > target.getPosition().y ? 1 : -1))));
+                    //                 }
+                    //             }
+                    //         }   
+                    //     }
+                    //         changeState(CharacterState.walking);
+                    //     } else {
+                    //         timeToAttack = Time.time + 1/currentATKSPD;
+                    //         changeState(CharacterState.attacking);
+                    //     }
+                    // }
                     break;
-                case CharacterState.walking:
-                    if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                        timeToAttack = Time.time + 1/currentATKSPD;
-                        changeState(CharacterState.attacking);
-                    } else {
-                    }
-                    break;
+                // case CharacterState.walking:
+                //     if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
+                //         timeToAttack = Time.time + 1/currentATKSPD;
+                //         changeState(CharacterState.attacking);
+                //     } else {
+                //     }
+                //     break;
                 case CharacterState.attacking:
                     // Wait for the current animation to finish
                     playerAnim.SetBool("Attacking", true);
@@ -173,10 +160,10 @@ public class CharacterController : MonoBehaviour
                 //Vector3 mousePos = Input.mousePosition;
                 //Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
                 //Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-                
-                if (Math.Round(worldPosition.x) == position.x && Math.Round(worldPosition.y) == position.y) {
+                if (Math.Round(worldPosition.x) == Math.Round(this.transform.position.x) && Math.Round(worldPosition.y) == Math.Round(this.transform.position.y)) {
                     isPressed = true;
                     isBeingDragged?.Invoke(true);
+                    Debug.Log(this.transform.position);
                 }
             }
             if (isPressed) {
@@ -185,18 +172,18 @@ public class CharacterController : MonoBehaviour
                     mousePos.z = 5.23f;
                     this.transform.position = (worldPosition);
                 } else {
-                    var positionX = (float) Math.Round(worldPosition.x);
-                    var positionY = (float) Math.Round(worldPosition.y);
-                    if (positionY < 0 || positionX < 0 || positionY > 8 || positionX > 16 || GridManager.Instance.getTile(new Vector2(positionX, positionY)).isOccupied()) {
-                        this.transform.position = this.position;
-                    } else {
-                        GridManager.Instance.getTile(this.position).setOccupied(false);
-                        this.transform.position = new Vector2(positionX, positionY);
-                        this.position = new Vector2((float) Math.Round(worldPosition.x), (float) Math.Round(worldPosition.y));
-                        GridManager.Instance.getTile(this.position).setOccupied(true);
-                    }
-                    isPressed = false;
-                    isBeingDragged?.Invoke(false);
+                    // var positionX = (float) Math.Round(worldPosition.x);
+                    // var positionY = (float) Math.Round(worldPosition.y);
+                    // if (positionY < 0 || positionX < 0 || positionY > 8 || positionX > 16 || GridManager.Instance.getTile(new Vector2(positionX, positionY)).isOccupied()) {
+                    //     this.transform.position = this.position;
+                    // } else {
+                    //     GridManager.Instance.getTile(this.position).setOccupied(false);
+                    //     this.transform.position = new Vector2(positionX, positionY);
+                    //     this.position = new Vector2((float) Math.Round(worldPosition.x), (float) Math.Round(worldPosition.y));
+                    //     GridManager.Instance.getTile(this.position).setOccupied(true);
+                    // }
+                    // isPressed = false;
+                    // isBeingDragged?.Invoke(false);
                 }
             }
         }
@@ -227,22 +214,11 @@ public class CharacterController : MonoBehaviour
         return side;
     }
 
-    public Vector2 getPosition() {
-        return position;
-    }
-
     public void Attack() {
         if (target.currentHP <= 0) {
             changeState(CharacterState.standby);
-        } else if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-            changeState(CharacterState.walking);
-        } else if (Time.time >= timeToAttack) {
+        } else {
             target.takeDMG(currentATK);
-            if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                changeState(CharacterState.walking);
-            } else {
-                timeToAttack = Time.time + 1/currentATKSPD;
-            }
         }
     }
 }
@@ -260,12 +236,4 @@ public enum CharacterState
     attacking,
     casting,
     dead
-}
-
-public enum Direction
-{
-    up,
-    down,
-    left,
-    right
 }

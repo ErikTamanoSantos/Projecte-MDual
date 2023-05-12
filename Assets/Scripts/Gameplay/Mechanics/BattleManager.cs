@@ -11,6 +11,8 @@ public class BattleManager : MonoBehaviour
 
     private List<CharacterController> enemyUnits = new List<CharacterController>();
 
+    [SerializeField] private List<Transform> playerPositions = new List<Transform>();
+
     private bool battleStarted;
 
     void Awake() {
