@@ -43,6 +43,8 @@ public class CharacterController : MonoBehaviour
     private bool isPressed = false;
 
     private Animator playerAnim;
+
+    private float lastPositionX, lastPositionY;
     
     // Start is called before the first frame update
     void Start()
@@ -160,10 +162,11 @@ public class CharacterController : MonoBehaviour
                 //Vector3 mousePos = Input.mousePosition;
                 //Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
                 //Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+                lastPositionX = this.transform.position.x;
+                lastPositionY = this.transform.position.y;
                 if (Math.Round(worldPosition.x) == Math.Round(this.transform.position.x) && Math.Round(worldPosition.y) == Math.Round(this.transform.position.y)) {
                     isPressed = true;
                     isBeingDragged?.Invoke(true);
-                    Debug.Log(this.transform.position);
                 }
             }
             if (isPressed) {
@@ -172,8 +175,21 @@ public class CharacterController : MonoBehaviour
                     mousePos.z = 5.23f;
                     this.transform.position = (worldPosition);
                 } else {
-                    // var positionX = (float) Math.Round(worldPosition.x);
-                    // var positionY = (float) Math.Round(worldPosition.y);
+                    var positionX = (float) Math.Round(worldPosition.x);
+                    var positionY = (float) Math.Round(worldPosition.y);
+                    var validPosition = false;
+                    for (int i = 0; i < BattleManager.Instance.playerPositions.Count; i++) {
+                        if (positionX == Math.Round(BattleManager.Instance.playerPositions[i].transform.position.x) && positionY == Math.Round(BattleManager.Instance.playerPositions[i].transform.position.y)) {
+                            this.transform.position = new Vector3(BattleManager.Instance.playerPositions[i].transform.position.x, BattleManager.Instance.playerPositions[i].transform.position.y, this.transform.position.z);
+                            Debug.Log(this.transform.position);
+                            validPosition = true;
+                            break;
+                        }
+                    }
+                    if (!validPosition) {
+                        this.transform.position = new Vector3(lastPositionX, lastPositionY, this.transform.position.z);
+                    }
+                    isPressed = false;
                     // if (positionY < 0 || positionX < 0 || positionY > 8 || positionX > 16 || GridManager.Instance.getTile(new Vector2(positionX, positionY)).isOccupied()) {
                     //     this.transform.position = this.position;
                     // } else {
