@@ -15,13 +15,13 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private int baseRange;
     [SerializeField] private int BattleOrder;
 
-    private int currentHP;
-    private int currentMP;
-    private int currentATK;
-    private int currentMAG;
-    private float currentATKSPD;
-    private float currentMOVSPD;
-    private int currentRange;
+    public int currentHP;
+    public int currentMP;
+    public int currentATK;
+    public int currentMAG;
+    public float currentATKSPD;
+    public float currentMOVSPD;
+    public int currentRange;
 
     public static event Action<bool> isBeingDragged;
 
@@ -38,7 +38,7 @@ public class CharacterController : MonoBehaviour
 
     private float timeToAttack;
 
-    private int orderPosition;
+    public int orderPosition;
 
     private bool isPressed = false;
 
@@ -65,6 +65,9 @@ public class CharacterController : MonoBehaviour
         currentMOVSPD = baseMOVSPD;
         currentRange = baseRange;
         changeState(CharacterState.standby);
+        if (side == Side.enemy) {
+            this.transform.localScale = new Vector3(-(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
+        }
     }
 
     // Update is called once per frame
@@ -75,6 +78,9 @@ public class CharacterController : MonoBehaviour
             {
                 case CharacterState.standby:
                     playerAnim.SetBool("Attacking", false);
+                    if (BattleManager.Instance.currentTurn == side && orderPosition == 0) {
+                        changeState(CharacterState.attacking);
+                    }
                     // if (target == null) 
                     // {
                     //     List<CharacterController> targets;
@@ -155,51 +161,52 @@ public class CharacterController : MonoBehaviour
                     break;
             }
         } else {
-            Vector3 mousePos = Input.mousePosition;
-            Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-            if (Input.GetMouseButtonDown(0)) {
-                //Vector3 mousePos = Input.mousePosition;
-                //Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-                //Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-                lastPositionX = this.transform.position.x;
-                lastPositionY = this.transform.position.y;
-                if (Math.Round(worldPosition.x) == Math.Round(this.transform.position.x) && Math.Round(worldPosition.y) == Math.Round(this.transform.position.y)) {
-                    isPressed = true;
-                    isBeingDragged?.Invoke(true);
+            if (side == Side.player) {
+                Vector3 mousePos = Input.mousePosition;
+                Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+                if (Input.GetMouseButtonDown(0)) {
+                    //Vector3 mousePos = Input.mousePosition;
+                    //Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                    //Vector2 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+                    lastPositionX = this.transform.position.x;
+                    lastPositionY = this.transform.position.y;
+                    if (Math.Round(worldPosition.x) == Math.Round(this.transform.position.x) && Math.Round(worldPosition.y) == Math.Round(this.transform.position.y)) {
+                        isPressed = true;
+                        isBeingDragged?.Invoke(true);
+                    }
                 }
-            }
-            if (isPressed) {
-                if (Input.GetMouseButton(0)) {
-                    // Agafa la posició del mouse en l'escena
-                    mousePos.z = 5.23f;
-                    this.transform.position = (worldPosition);
-                } else {
-                    var positionX = (float) Math.Round(worldPosition.x);
-                    var positionY = (float) Math.Round(worldPosition.y);
-                    var validPosition = false;
-                    for (int i = 0; i < BattleManager.Instance.playerPositions.Count; i++) {
-                        if (positionX == Math.Round(BattleManager.Instance.playerPositions[i].transform.position.x) && positionY == Math.Round(BattleManager.Instance.playerPositions[i].transform.position.y)) {
-                            this.transform.position = new Vector3(BattleManager.Instance.playerPositions[i].transform.position.x, BattleManager.Instance.playerPositions[i].transform.position.y, this.transform.position.z);
-                            Debug.Log(this.transform.position);
-                            validPosition = true;
-                            break;
+                if (isPressed) {
+                    if (Input.GetMouseButton(0)) {
+                        // Agafa la posició del mouse en l'escena
+                        mousePos.z = 5.23f;
+                        this.transform.position = (worldPosition);
+                    } else {
+                        var positionX = (float) Math.Round(worldPosition.x);
+                        var positionY = (float) Math.Round(worldPosition.y);
+                        var validPosition = false;
+                        for (int i = 0; i < BattleManager.Instance.playerPositions.Count; i++) {
+                            if (positionX == Math.Round(BattleManager.Instance.playerPositions[i].transform.position.x) && positionY == Math.Round(BattleManager.Instance.playerPositions[i].transform.position.y)) {
+                                BattleManager.Instance.swapPlayerUnits(orderPosition, i);
+                                validPosition = true;
+                                break;
+                            }
                         }
+                        if (!validPosition) {
+                            this.transform.position = new Vector3(lastPositionX, lastPositionY, this.transform.position.z);
+                        }
+                        isPressed = false;
+                        // if (positionY < 0 || positionX < 0 || positionY > 8 || positionX > 16 || GridManager.Instance.getTile(new Vector2(positionX, positionY)).isOccupied()) {
+                        //     this.transform.position = this.position;
+                        // } else {
+                        //     GridManager.Instance.getTile(this.position).setOccupied(false);
+                        //     this.transform.position = new Vector2(positionX, positionY);
+                        //     this.position = new Vector2((float) Math.Round(worldPosition.x), (float) Math.Round(worldPosition.y));
+                        //     GridManager.Instance.getTile(this.position).setOccupied(true);
+                        // }
+                        // isPressed = false;
+                        // isBeingDragged?.Invoke(false);
                     }
-                    if (!validPosition) {
-                        this.transform.position = new Vector3(lastPositionX, lastPositionY, this.transform.position.z);
-                    }
-                    isPressed = false;
-                    // if (positionY < 0 || positionX < 0 || positionY > 8 || positionX > 16 || GridManager.Instance.getTile(new Vector2(positionX, positionY)).isOccupied()) {
-                    //     this.transform.position = this.position;
-                    // } else {
-                    //     GridManager.Instance.getTile(this.position).setOccupied(false);
-                    //     this.transform.position = new Vector2(positionX, positionY);
-                    //     this.position = new Vector2((float) Math.Round(worldPosition.x), (float) Math.Round(worldPosition.y));
-                    //     GridManager.Instance.getTile(this.position).setOccupied(true);
-                    // }
-                    // isPressed = false;
-                    // isBeingDragged?.Invoke(false);
                 }
             }
         }
@@ -217,6 +224,8 @@ public class CharacterController : MonoBehaviour
         Debug.Log(side + " took " + dmg + ", current HP " + currentHP);
         if (currentHP <= 0) {
             changeState(CharacterState.dead);
+        } else {
+            BattleManager.Instance.changeTurn();
         }
     }
 
@@ -231,11 +240,8 @@ public class CharacterController : MonoBehaviour
     }
 
     public void Attack() {
-        if (target.currentHP <= 0) {
-            changeState(CharacterState.standby);
-        } else {
-            target.takeDMG(currentATK);
-        }
+        changeState(CharacterState.standby);
+        BattleManager.Instance.enemyUnits[0].takeDMG(currentATK);
     }
 }
 

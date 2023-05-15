@@ -35,8 +35,6 @@ public class GridMap : MonoBehaviour
                 }
             }
         }
-
-        cam.transform.position = new Vector3((float) width/2 + 2.5f, (float) height/2 -0.5f, -10);
     }
 
     public int getWidth()
