@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
@@ -9,9 +10,15 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] public List<GameObject> playerPositions = new List<GameObject>();
     [SerializeField] public List<CharacterController> playerUnits = new List<CharacterController>();
+    [SerializeField] public List<TextMeshProUGUI> playerHPBars = new List<TextMeshProUGUI>();
+    [SerializeField] public List<GameObject> playerHPIcons = new List<GameObject>();
 
     [SerializeField] public List<GameObject> enemyPositions = new List<GameObject>();
     [SerializeField] public List<CharacterController> enemyUnits = new List<CharacterController>();
+    [SerializeField] public List<TextMeshProUGUI> enemyHPBars = new List<TextMeshProUGUI>();
+    [SerializeField] public List<GameObject> enemyHPIcons = new List<GameObject>();
+
+    [SerializeField] private TextMeshProUGUI BattleEnd_Title, BattleEnd_Description;
 
     private bool battleStarted;
 
@@ -21,11 +28,28 @@ public class BattleManager : MonoBehaviour
         Instance = this;
         GameManager.OnGameStateChanged += OnGameStateChanged;
         Debug.Log(playerPositions.Count - playerUnits.Count);
+        for (int i = 0; i < playerUnits.Count; i++) {
+            playerUnits[i].transform.position =  new Vector3 (playerPositions[i].transform.position.x, playerPositions[i].transform.position.y, playerUnits[i].transform.position.z);
+        }
+        for (int i = 0; i < enemyUnits.Count; i++) {
+            enemyUnits[i].transform.position =  new Vector3 (enemyPositions[i].transform.position.x, enemyPositions[i].transform.position.y, enemyUnits[i].transform.position.z);
+        }
         for (int i = 0; i <= playerPositions.Count - playerUnits.Count; i++) {
             playerUnits.Add(null);
         }
         for (int i = 0; i <= enemyPositions.Count - enemyUnits.Count; i++) {
             enemyUnits.Add(null);
+        }
+    }
+
+     void Update()
+    {
+        for (int i = 0; i < playerUnits.Count; i++) {
+            if (playerUnits[i] != null) {
+                playerHPBars[i].text = "" + playerUnits[i].currentHP;
+            } else {
+                playerHPBars[i].text = "";
+            }
         }
     }
 
@@ -41,10 +65,12 @@ public class BattleManager : MonoBehaviour
                 StartBattle();
                 break;
             case GameState.BattleWon:
+                //BattleEnd_Title.text = "VICTORY!";
                 SceneManager.LoadScene("MapScene");
                 break;
             case GameState.BattleLost:
-                SceneManager.LoadScene("MapScene");
+                BattleEnd_Description.text = "DEFEAT!";
+                //SceneManager.LoadScene("MapScene");
                 break;
         }
     }
@@ -64,12 +90,15 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < playerUnits.Count; i++) {
             if (playerUnits[i] != null) {
                 emptyParty = false;
+                playerUnits[i].transform.position = new Vector3 (playerPositions[i].transform.position.x, playerPositions[i].transform.position.y, playerUnits[i].transform.position.z);
+                playerUnits[i].orderPosition--;
                 break;
             }
         }
         if (emptyParty) {
             GameManager.Instance.UpdateGameState(GameState.BattleLost);
             Debug.Log("LOSE");
+        } else {
         }
     }
 

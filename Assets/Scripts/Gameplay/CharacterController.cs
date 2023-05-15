@@ -215,6 +215,7 @@ public class CharacterController : MonoBehaviour
 
     void changeState(CharacterState newState) 
     {
+        Debug.Log(newState);
         characterState = newState;
     }
 
@@ -241,7 +242,11 @@ public class CharacterController : MonoBehaviour
 
     public void Attack() {
         changeState(CharacterState.standby);
-        BattleManager.Instance.enemyUnits[0].takeDMG(currentATK);
+        if (side == Side.player) {
+            BattleManager.Instance.enemyUnits[0].takeDMG(currentATK);
+        } else {
+            BattleManager.Instance.playerUnits[0].takeDMG(currentATK);
+        }
     }
 }
 

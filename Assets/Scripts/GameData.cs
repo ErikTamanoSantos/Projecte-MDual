@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class GameData
 {
     // MAP DATA
+    public static int currentLevel = 1;
     public static Vector2 Map_CharacterPos = new Vector2(3, 2);
     /*
     public static MapTileType[,] Map_CurrentLayout = new MapTileType[,] {

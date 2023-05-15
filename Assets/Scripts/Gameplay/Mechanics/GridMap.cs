@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GridMap : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GridMap : MonoBehaviour
     [SerializeField] private MapTile tilePrefab;
     [SerializeField] private Transform cam;
     [SerializeField] private GameObject character;
+    [SerializeField] private TextMeshProUGUI levelLabel;
     public static GridMap Instance;
 
     void Awake() {
@@ -20,7 +22,7 @@ public class GridMap : MonoBehaviour
     }
 
     void Update() {
-
+        levelLabel.text = "Level " + GameData.currentLevel;
     }
 
     void GenerateGrid() {
