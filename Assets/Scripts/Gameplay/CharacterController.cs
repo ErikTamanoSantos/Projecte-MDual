@@ -28,7 +28,7 @@ public class CharacterController : MonoBehaviour
     private Vector2 position;
     private Vector2 targetPosition;
 
-    private CharacterState characterState;
+    public CharacterState characterState;
 
     [SerializeField] private Side side;
 
@@ -78,6 +78,7 @@ public class CharacterController : MonoBehaviour
             {
                 case CharacterState.standby:
                     playerAnim.SetBool("Attacking", false);
+                    playerAnim.SetBool("Hurt", false);
                     if (BattleManager.Instance.currentTurn == side && orderPosition == 0) {
                         changeState(CharacterState.attacking);
                     }
@@ -150,6 +151,17 @@ public class CharacterController : MonoBehaviour
                 case CharacterState.attacking:
                     // Wait for the current animation to finish
                     playerAnim.SetBool("Attacking", true);
+                    if (side == Side.player) {
+                        BattleManager.Instance.enemyUnits[0].changeState(CharacterState.hurt);
+                    } else {
+                        BattleManager.Instance.playerUnits[0].changeState(CharacterState.hurt);
+                    }
+                    BattleManager.Instance.changeTurn();
+                    changeState(CharacterState.waiting);
+                    break;
+                case CharacterState.hurt:
+                    break;
+                case CharacterState.waiting:
                     break;
                 case CharacterState.dead:
                     if (side == Side.player) {
@@ -213,10 +225,14 @@ public class CharacterController : MonoBehaviour
         
     }
 
-    void changeState(CharacterState newState) 
+    public void changeState(CharacterState newState) 
     {
-        Debug.Log(newState);
+        if (this.characterState != newState) {
+            if (this.side == Side.player) {
+                Debug.Log(newState);
+            }
         characterState = newState;
+        }
     }
 
     public void takeDMG(int dmg) 
@@ -226,8 +242,13 @@ public class CharacterController : MonoBehaviour
         if (currentHP <= 0) {
             changeState(CharacterState.dead);
         } else {
-            BattleManager.Instance.changeTurn();
+            playerAnim.SetBool("Hurt", true);
         }
+    }
+
+    void finishHurtAnim() {
+        playerAnim.SetBool("Hurt", false);
+        changeState(CharacterState.standby);
     }
 
     public bool isTargetable()
@@ -241,7 +262,7 @@ public class CharacterController : MonoBehaviour
     }
 
     public void Attack() {
-        changeState(CharacterState.standby);
+        Debug.Log("ATTACK");
         if (side == Side.player) {
             BattleManager.Instance.enemyUnits[0].takeDMG(currentATK);
         } else {
@@ -259,8 +280,9 @@ public enum Side
 public enum CharacterState
 {
     standby,
-    walking,
+    hurt,
     attacking,
     casting,
+    waiting,
     dead
 }
