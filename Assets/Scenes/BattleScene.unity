@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 77574021}
   - component: {fileID: 77574020}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Game End Desc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -873,13 +873,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77574018}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1590276500}
-  m_RootOrder: 5
+  m_Father: {fileID: 149453973}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1200,7 +1200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &149453973
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1216,6 +1216,7 @@ RectTransform:
   - {fileID: 1806051038}
   - {fileID: 1336353149}
   - {fileID: 883749459}
+  - {fileID: 77574019}
   m_Father: {fileID: 1590276500}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7925,6 +7926,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   State: 0
+  unitPrefabs:
+  - {fileID: 6669708383654060015, guid: 3ad286ebf426a594cba481c54fb02286, type: 3}
+  - {fileID: 1258150305692323072, guid: e626664ede7ce9c4abe8f86e6812eca0, type: 3}
 --- !u!114 &1147061012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7957,8 +7961,10 @@ MonoBehaviour:
   - {fileID: 1020317282}
   enemyHPBars: []
   enemyHPIcons: []
-  BattleEnd_Title: {fileID: 0}
-  BattleEnd_Description: {fileID: 0}
+  BattleEnd_Title: {fileID: 883749460}
+  BattleEnd_Description: {fileID: 77574020}
+  BattleEnd_bg: {fileID: 1806051037}
+  BattleEnd_TitleBg: {fileID: 1336353147}
   currentTurn: 0
 --- !u!1 &1163531925
 GameObject:
@@ -11180,7 +11186,6 @@ RectTransform:
   - {fileID: 313178350}
   - {fileID: 681773013}
   - {fileID: 149453973}
-  - {fileID: 77574019}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

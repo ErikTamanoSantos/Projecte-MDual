@@ -20,11 +20,17 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI BattleEnd_Title, BattleEnd_Description;
 
+    [SerializeField] private GameObject BattleEnd_bg, BattleEnd_TitleBg;
+
     private bool battleStarted;
 
     public Side currentTurn;
 
     void Awake() {
+        BattleEnd_bg.SetActive(false);
+        BattleEnd_TitleBg.SetActive(false);
+        BattleEnd_Title.enabled = false;
+        BattleEnd_Description.enabled = false;
         Instance = this;
         GameManager.OnGameStateChanged += OnGameStateChanged;
         Debug.Log(playerPositions.Count - playerUnits.Count);
@@ -65,8 +71,12 @@ public class BattleManager : MonoBehaviour
                 StartBattle();
                 break;
             case GameState.BattleWon:
-                //BattleEnd_Title.text = "VICTORY!";
-                SceneManager.LoadScene("MapScene");
+                BattleEnd_Title.text = "VICTORY!";
+                BattleEnd_bg.SetActive(true);
+                BattleEnd_TitleBg.SetActive(true);
+                BattleEnd_Title.enabled = true;
+                BattleEnd_Description.enabled = true;
+                //SceneManager.LoadScene("MapScene");
                 break;
             case GameState.BattleLost:
                 BattleEnd_Description.text = "DEFEAT!";
@@ -99,6 +109,7 @@ public class BattleManager : MonoBehaviour
             GameManager.Instance.UpdateGameState(GameState.BattleLost);
             Debug.Log("LOSE");
         } else {
+            resetTurns();
         }
     }
 
@@ -115,6 +126,8 @@ public class BattleManager : MonoBehaviour
         if (emptyParty) {
             GameManager.Instance.UpdateGameState(GameState.BattleWon);
             Debug.Log("WIN");
+        } else {
+            resetTurns();
         }
     }
 
@@ -174,11 +187,23 @@ public class BattleManager : MonoBehaviour
     }
 
     public void changeTurn() {
+        Debug.Log("bef: " + currentTurn);
         if (currentTurn == Side.player) {
             currentTurn = Side.enemy;
         } else {
             currentTurn = Side.player;
         }
+        Debug.Log("aft: " +currentTurn);
+    }
+
+    public void resetTurns() {
+        if (playerUnits[0].currentATKSPD > enemyUnits[0].currentATKSPD) {
+            currentTurn = Side.player;
+        } else {
+            currentTurn = Side.enemy;
+        }
+        playerUnits[0].changeState(CharacterState.standby);
+        enemyUnits[0].changeState(CharacterState.standby);
     }
 
 }

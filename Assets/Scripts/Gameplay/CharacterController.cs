@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    CharacterData data;
+    public CharacterData data;
     [SerializeField] private int maxHP;
     [SerializeField] private int maxMP;
     [SerializeField] private int baseATK;
@@ -45,6 +45,7 @@ public class CharacterController : MonoBehaviour
     private Animator playerAnim;
 
     private float lastPositionX, lastPositionY;
+    int counter = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -82,72 +83,7 @@ public class CharacterController : MonoBehaviour
                     if (BattleManager.Instance.currentTurn == side && orderPosition == 0) {
                         changeState(CharacterState.attacking);
                     }
-                    // if (target == null) 
-                    // {
-                    //     List<CharacterController> targets;
-                    //     if (side == 0) {
-                    //         targets = BattleManager.Instance.getEnemyUnits();
-                    //     } else {
-                    //         targets = BattleManager.Instance.getPlayerUnits();
-                    //     }
-                    //     for (int i = 0; i < targets.Count; i++) {
-                    //         if (
-                    //             target == null || 
-                    //             Vector3.Distance(this.transform.position, target.transform.position) > Vector3.Distance(this.transform.position, targets[i].transform.position)) 
-                    //             {
-                    //                 target = targets[i];
-                    //         }
-                    //     }
-                    //     if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                    //         if (this.position.y < target.getPosition().y) {
-                    //         bool pathFound = false;
-                    //         while (pathFound) {
-                    //             if (route.Count == 0) {
-
-                    //                 if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x, this.position.y + (this.position.y > target.getPosition().y ? -1 : 1)))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, this.position.y + (this.position.y > target.getPosition().y ? -1 : 1))));
-                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y)));
-                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y)));
-                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, (this.position.y > target.getPosition().y ? 1 : -1))));
-                    //                 }
-                                    
-                    //             } else if(route[route.Count-1].getPosition().x - target.getPosition().x + route[route.Count-1].getPosition().y - target.getPosition().y < baseRange) {
-                    //                 changeState(CharacterState.walking);
-                    //                 pathFound = true;
-                    //             } else {
-                    //                 if (possibleTile[GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].getPosition().y > target.getPosition().y ? -1 : 1)))]) {
-                    //                     /*if (GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].position.y > target.getPosition().y ? -1 : 1))).Equals(route[route.Count - 1])) {
-                    //                         possibleTile[GridManager.Instance.getTile(new Vector2(route[route.Count - 1].getPosition().x, route[route.Count - 1].getPosition().y + (route[route.Count - 1].position.y > target.getPosition().y ? -1 : 1)))] = false;
-                                            
-                    //                     } else {
-                    //                     }*/
-                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? -1 : 1), this.position.y)));
-                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y)));
-                    //                 } else if (possibleTile[GridManager.Instance.getTile(new Vector2(this.position.x + (this.position.x > target.getPosition().x ? 1 : -1), this.position.y))]) {
-                    //                     route.Add(GridManager.Instance.getTile(new Vector2(this.position.x, (this.position.y > target.getPosition().y ? 1 : -1))));
-                    //                 }
-                    //             }
-                    //         }   
-                    //     }
-                    //         changeState(CharacterState.walking);
-                    //     } else {
-                    //         timeToAttack = Time.time + 1/currentATKSPD;
-                    //         changeState(CharacterState.attacking);
-                    //     }
-                    // }
                     break;
-                // case CharacterState.walking:
-                //     if ((this.position.x - target.getPosition().x + this.position.y - target.getPosition().y) > baseRange) {
-                //         timeToAttack = Time.time + 1/currentATKSPD;
-                //         changeState(CharacterState.attacking);
-                //     } else {
-                //     }
-                //     break;
                 case CharacterState.attacking:
                     // Wait for the current animation to finish
                     playerAnim.SetBool("Attacking", true);
@@ -160,6 +96,7 @@ public class CharacterController : MonoBehaviour
                     changeState(CharacterState.waiting);
                     break;
                 case CharacterState.hurt:
+                    playerAnim.SetBool("Attacking", false);
                     break;
                 case CharacterState.waiting:
                     break;
@@ -208,16 +145,6 @@ public class CharacterController : MonoBehaviour
                             this.transform.position = new Vector3(lastPositionX, lastPositionY, this.transform.position.z);
                         }
                         isPressed = false;
-                        // if (positionY < 0 || positionX < 0 || positionY > 8 || positionX > 16 || GridManager.Instance.getTile(new Vector2(positionX, positionY)).isOccupied()) {
-                        //     this.transform.position = this.position;
-                        // } else {
-                        //     GridManager.Instance.getTile(this.position).setOccupied(false);
-                        //     this.transform.position = new Vector2(positionX, positionY);
-                        //     this.position = new Vector2((float) Math.Round(worldPosition.x), (float) Math.Round(worldPosition.y));
-                        //     GridManager.Instance.getTile(this.position).setOccupied(true);
-                        // }
-                        // isPressed = false;
-                        // isBeingDragged?.Invoke(false);
                     }
                 }
             }
@@ -228,8 +155,9 @@ public class CharacterController : MonoBehaviour
     public void changeState(CharacterState newState) 
     {
         if (this.characterState != newState) {
-            if (this.side == Side.player) {
-                Debug.Log(newState);
+            if (this.side == Side.enemy) {
+                Debug.Log(counter + " " + newState);
+                counter++;
             }
         characterState = newState;
         }
@@ -238,7 +166,6 @@ public class CharacterController : MonoBehaviour
     public void takeDMG(int dmg) 
     {
         currentHP -= dmg;
-        Debug.Log(side + " took " + dmg + ", current HP " + currentHP);
         if (currentHP <= 0) {
             changeState(CharacterState.dead);
         } else {
@@ -262,7 +189,7 @@ public class CharacterController : MonoBehaviour
     }
 
     public void Attack() {
-        Debug.Log("ATTACK");
+        playerAnim.SetBool("Attacking", false);
         if (side == Side.player) {
             BattleManager.Instance.enemyUnits[0].takeDMG(currentATK);
         } else {

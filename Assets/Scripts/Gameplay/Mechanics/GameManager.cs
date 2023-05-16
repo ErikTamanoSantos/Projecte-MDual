@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     public static event Action<GameState> OnGameStateChanged;
 
+    [SerializeField] public List<GameObject> unitPrefabs;
+
     void Awake() {
         Instance = this;
     }
