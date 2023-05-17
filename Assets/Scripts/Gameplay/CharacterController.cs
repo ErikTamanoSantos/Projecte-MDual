@@ -30,7 +30,7 @@ public class CharacterController : MonoBehaviour
 
     public CharacterState characterState;
 
-    [SerializeField] private Side side;
+    [SerializeField] public Side side;
 
     private CharacterController target;
 
@@ -50,6 +50,13 @@ public class CharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (side == Side.enemy) {
+            maxHP = 25+(10*(GameData.currentLevel-1));
+            currentHP = 25+(10*(GameData.currentLevel-1));
+            currentATK = 3+(7*(GameData.currentLevel-1));
+            currentMAG = 3+(7*(GameData.currentLevel-1));
+            currentATKSPD = 4f+(4*(GameData.currentLevel-1));
+        }
         playerAnim = GetComponent<Animator>();
         // for (int x = 0; x < GridManager.Instance.getWidth(); x++) {
         //     for (int y = 0; y < GridManager.Instance.getHeight(); y++) {
@@ -57,14 +64,6 @@ public class CharacterController : MonoBehaviour
         //         possibleTile.Add(curTile, !curTile.isOccupied());
         //     }
         // }
-
-        currentHP = maxHP;
-        currentMP = maxMP;
-        currentATK = baseATK;
-        currentMAG = baseMAG;
-        currentATKSPD = baseATKSPD;
-        currentMOVSPD = baseMOVSPD;
-        currentRange = baseRange;
         changeState(CharacterState.standby);
         if (side == Side.enemy) {
             this.transform.localScale = new Vector3(-(this.transform.localScale.x), this.transform.localScale.y, this.transform.localScale.z);
@@ -199,6 +198,16 @@ public class CharacterController : MonoBehaviour
             BattleManager.Instance.removeEnemyUnit(this);
         }
         UnityEngine.Object.Destroy(gameObject);
+    }
+
+    public void setStats() {
+        currentHP = data.currentHP;
+        currentMP = 0;
+        currentATK = data.baseATK;
+        currentMAG = data.baseMAG;
+        currentATKSPD = data.baseATKSPD;
+        currentMOVSPD = data.baseMOVSPD;
+        currentRange = data.baseRange;
     }
 }
 

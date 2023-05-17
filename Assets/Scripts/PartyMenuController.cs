@@ -45,7 +45,7 @@ public class PartyMenuController : MonoBehaviour
         CharacterData character = GameData.Party_InactiveParty[index];
         if (character != null) {
             GameData.Party_InactiveParty.Remove(character);
-            for (int i = 0; i < GameData.Party_ActiveParty.Length; i++) {
+            for (int i = 0; i < GameData.Party_ActiveParty.Count; i++) {
                 if (GameData.Party_ActiveParty[i] == null) {
                     GameData.Party_ActiveParty[i] = character;
                     break;

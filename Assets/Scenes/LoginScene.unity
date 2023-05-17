@@ -1034,6 +1034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loginButton: {fileID: 1841143848}
   usernameInput: {fileID: 571341668}
+  passwordInput: {fileID: 1837685900}
 --- !u!1 &1188646240
 GameObject:
   m_ObjectHideFlags: 0

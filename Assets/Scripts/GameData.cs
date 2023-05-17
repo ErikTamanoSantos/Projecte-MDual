@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class GameData
 {
+
+    public static string userId;
     // MAP DATA
     public static int currentLevel = 1;
     public static Vector2 Map_CharacterPos = new Vector2(3, 2);
@@ -37,7 +39,7 @@ public class GameData
 
     };
     // PARTY DATA
-    public static CharacterData[] Party_ActiveParty = new CharacterData[7] {new CharacterData("test", 1, 1, 1, 1, 1, 1, 1, 1), null, null, null, null, null, null};
+    public static List<CharacterData> Party_ActiveParty = new List<CharacterData>();
     public static List<CharacterData> Party_InactiveParty = new List<CharacterData>();
 
     //EQUIPMENT DATA

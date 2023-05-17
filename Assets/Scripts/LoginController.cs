@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MainMenuEvents : MonoBehaviour
+public class LoginController : MonoBehaviour
 {
     [SerializeField] private Button loginButton;
-    [SerializeField] private TMP_InputField usernameInput;
+    [SerializeField] private TMP_InputField usernameInput, passwordInput;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +16,7 @@ public class MainMenuEvents : MonoBehaviour
 
     void LoginEvent()
     {
-        Debug.Log(usernameInput.text);
+        StartCoroutine(UtilsServer.login(usernameInput.text, passwordInput.text));
+        
     }
 }

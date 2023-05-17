@@ -9,7 +9,7 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance;
 
     [SerializeField] public List<GameObject> playerPositions = new List<GameObject>();
-    [SerializeField] public List<CharacterController> playerUnits = new List<CharacterController>();
+    public List<CharacterController> playerUnits = new List<CharacterController>();
     [SerializeField] public List<TextMeshProUGUI> playerHPBars = new List<TextMeshProUGUI>();
     [SerializeField] public List<GameObject> playerHPIcons = new List<GameObject>();
 
@@ -22,15 +22,40 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private GameObject BattleEnd_bg, BattleEnd_TitleBg;
 
+    [SerializeField] GameObject prefab_nightborne, prefab_necromancer;
+
+    [SerializeField] Button exit_button;
+
     private bool battleStarted;
 
     public Side currentTurn;
 
     void Awake() {
+        for (int i = 0; i < GameData.Party_ActiveParty.Count; i++) {
+            if (GameData.Party_ActiveParty[i].name == "nightborne") {
+                GameObject nightborne = (GameObject) Instantiate(prefab_nightborne);
+                var nightborneController = nightborne.GetComponent<CharacterController>();
+                nightborneController.data = GameData.Party_ActiveParty[i];
+                nightborneController.side = Side.player;
+                nightborneController.orderPosition = i;
+                nightborneController.setStats();
+                playerUnits.Add(nightborneController);
+            } else if (GameData.Party_ActiveParty[i].name == "necromancer") {
+                GameObject necromancer = (GameObject) Instantiate(prefab_necromancer);
+                var necromancerController = necromancer.GetComponent<CharacterController>();
+                necromancerController.data = GameData.Party_ActiveParty[i];
+                necromancerController.side = Side.player;
+                necromancerController.orderPosition = i;
+                necromancerController.setStats();
+                playerUnits.Add(necromancerController);
+            }
+        }
         BattleEnd_bg.SetActive(false);
         BattleEnd_TitleBg.SetActive(false);
         BattleEnd_Title.enabled = false;
         BattleEnd_Description.enabled = false;
+        exit_button.enabled = false;
+        exit_button.onClick.AddListener(delegate {SceneManager.LoadScene(MapScene)});
         Instance = this;
         GameManager.OnGameStateChanged += OnGameStateChanged;
         Debug.Log(playerPositions.Count - playerUnits.Count);
@@ -72,10 +97,19 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameState.BattleWon:
                 BattleEnd_Title.text = "VICTORY!";
+                for (int i = 0; i < playerHPBars.Count; i++) {
+                    playerHPBars[i].enabled = false;
+                }
+                exit_button.enable = true;
                 BattleEnd_bg.SetActive(true);
                 BattleEnd_TitleBg.SetActive(true);
                 BattleEnd_Title.enabled = true;
                 BattleEnd_Description.enabled = true;
+                for (int i = 0; i < playerUnits.Count; i++) {
+                    if (playerUnits[i] != null) {
+                        BattleEnd_Description.text += playerUnits[i].data.name + " gained 10 XP\n";
+                    }
+                }
                 //SceneManager.LoadScene("MapScene");
                 break;
             case GameState.BattleLost:
