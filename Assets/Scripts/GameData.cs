@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class GameData : MonoBehaviour
+public class GameData
 {
     // MAP DATA
     public static int currentLevel = 1;

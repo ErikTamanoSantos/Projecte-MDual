@@ -17,7 +17,7 @@ public class GridMap : MonoBehaviour
         Instance = this;
         GenerateGrid();
         character.transform.position = new Vector3(GameData.Map_CharacterPos.x, GameData.Map_CharacterPos.y, -1);
-
+        StartCoroutine(UtilsServer.Upload());
         
     }
 

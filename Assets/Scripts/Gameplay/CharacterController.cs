@@ -101,12 +101,7 @@ public class CharacterController : MonoBehaviour
                 case CharacterState.waiting:
                     break;
                 case CharacterState.dead:
-                    if (side == Side.player) {
-                        BattleManager.Instance.removePlayerUnit(this);
-                    } else {
-                        BattleManager.Instance.removeEnemyUnit(this);
-                    }
-                    UnityEngine.Object.Destroy(gameObject);
+                    playerAnim.SetBool("Dead", true);
                     break;
             }
         } else {
@@ -195,6 +190,15 @@ public class CharacterController : MonoBehaviour
         } else {
             BattleManager.Instance.playerUnits[0].takeDMG(currentATK);
         }
+    }
+
+    void Die() {
+        if (side == Side.player) {
+            BattleManager.Instance.removePlayerUnit(this);
+        } else {
+            BattleManager.Instance.removeEnemyUnit(this);
+        }
+        UnityEngine.Object.Destroy(gameObject);
     }
 }
 
