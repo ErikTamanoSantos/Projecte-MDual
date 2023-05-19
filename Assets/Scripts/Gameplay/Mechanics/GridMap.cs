@@ -85,9 +85,6 @@ public class GridMap : MonoBehaviour
                 break;
         }
 
-        Debug.Log("x " +GameData.Map_CharacterPos.x);
-        Debug.Log("y " +GameData.Map_CharacterPos.y);
-        Debug.Log(GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y]);
 
         if (GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] == MapTileType.battle) {
             GameObject.FindGameObjectWithTag("BattleScreenMusic").GetComponent<MusicPlayer>().playMusic();
@@ -95,7 +92,6 @@ public class GridMap : MonoBehaviour
         } else if (GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] == MapTileType.next_level) {
             GameData.currentLevel++;
             GameData.generateRandomMapLayout();
-            Debug.Log("asdassadasd");
             SceneManager.LoadScene("MapScene");
         }
     }

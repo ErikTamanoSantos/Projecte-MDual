@@ -51,7 +51,6 @@ public class GameData
 
     public static void generateRandomMapLayout() {
         var random = (int) Mathf.Round(Random.Range(0, 3));
-        Debug.Log(random);
         switch (random) {
             case 0:
             /*

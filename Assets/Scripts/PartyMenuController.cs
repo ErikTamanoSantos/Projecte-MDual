@@ -56,7 +56,6 @@ public class PartyMenuController : MonoBehaviour
     void renderData() {
         for (int i = 0; i < ActiveParty_Names.Count; i++) {
             if (GameData.Party_ActiveParty.Count > i && GameData.Party_ActiveParty[i] != null) {
-                Debug.Log(GameData.Party_ActiveParty[i].name);
                 ActiveParty_Names[i].text = GameData.Party_ActiveParty[i].name;
             } else {
                  ActiveParty_Names[i].text = "";

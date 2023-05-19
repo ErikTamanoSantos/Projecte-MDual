@@ -138,7 +138,6 @@ public class BattleManager : MonoBehaviour
                         } else {
                             BattleEnd_Description.text += playerUnits[i].data.name + " gained 10 XP\n";   
                         }
-                        Debug.Log("EXP: " + playerUnits[i].data.currentLvl + " " + playerUnits[i].data.currentXP);
                     }
                 }
                 GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] = MapTileType.walkable;
@@ -151,7 +150,6 @@ public class BattleManager : MonoBehaviour
                     playerHPBars[i].enabled = false;
                 }
                 for (int i = 0; i < playerHPIcons.Count; i++) {
-                    Debug.Log("ICON");
                     playerHPIcons[i].enabled = false;
                 }
                 for (int i = 0; i < enemyHPBars.Count; i++) {
@@ -193,7 +191,6 @@ public class BattleManager : MonoBehaviour
         }
         if (emptyParty) {
             GameManager.Instance.UpdateGameState(GameState.BattleLost);
-            Debug.Log("LOSE");
         } else {
             resetTurns();
         }
@@ -201,7 +198,6 @@ public class BattleManager : MonoBehaviour
 
     public void removeEnemyUnit(CharacterController unit) {
         enemyUnits.Remove(unit);
-        Debug.Log(enemyUnits.Count);
         var emptyParty = true;
         for (int i = 0; i < enemyUnits.Count; i++) {
             if (enemyUnits[i] != null) {
@@ -211,7 +207,6 @@ public class BattleManager : MonoBehaviour
         }
         if (emptyParty) {
             GameManager.Instance.UpdateGameState(GameState.BattleWon);
-            Debug.Log("WIN");
         } else {
             resetTurns();
         }
@@ -235,10 +230,8 @@ public class BattleManager : MonoBehaviour
 
     public void swapPlayerUnits(int firstIndex, int secondIndex) {
         CharacterController firstUnit = playerUnits[firstIndex];
-        Debug.Log("first: " + firstIndex + " second: " + secondIndex);
         if (playerUnits[secondIndex] == null) {
             for (int i = 0; i < playerUnits.Count; i++) {
-                Debug.Log("first i " + i);
                 if (playerUnits[i] == null) {
                     playerUnits[i] = firstUnit;
                     firstUnit.transform.position = new Vector3 (playerPositions[i].transform.position.x, playerPositions[i].transform.position.y, firstUnit.transform.position.z);
@@ -257,7 +250,6 @@ public class BattleManager : MonoBehaviour
             var secondPosition = secondUnit.orderPosition;
             firstUnit.orderPosition = secondPosition;
             secondUnit.orderPosition = firstPosition;
-            Debug.Log("1Pos: " + firstUnit.orderPosition + " 2Pos: " + secondUnit.orderPosition);
         }
     }
 
@@ -273,13 +265,11 @@ public class BattleManager : MonoBehaviour
     }
 
     public void changeTurn() {
-        Debug.Log("bef: " + currentTurn);
         if (currentTurn == Side.player) {
             currentTurn = Side.enemy;
         } else {
             currentTurn = Side.player;
         }
-        Debug.Log("aft: " +currentTurn);
     }
 
     public void resetTurns() {

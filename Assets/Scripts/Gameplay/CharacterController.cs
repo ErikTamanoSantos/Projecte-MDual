@@ -47,7 +47,6 @@ public class CharacterController : MonoBehaviour
     private Animator playerAnim;
 
     private float lastPositionX, lastPositionY;
-    int counter = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -161,8 +160,6 @@ public class CharacterController : MonoBehaviour
     {
         if (this.characterState != newState) {
             if (this.side == Side.enemy) {
-                Debug.Log(counter + " " + newState);
-                counter++;
             }
         characterState = newState;
         }

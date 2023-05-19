@@ -22,7 +22,6 @@ public class UtilsServer : MonoBehaviour {
 
     static string getString(string JSON, string key) {
         string trimmedJSON = JSON.Substring(1, JSON.Length-2);
-        Debug.Log(trimmedJSON);
 
         string[] JSONlist = trimmedJSON.Split(","[0]);
         for (int i = 0; i < JSONlist.Length; i++) {
@@ -53,10 +52,8 @@ public class UtilsServer : MonoBehaviour {
         else {
             if (getString(www.downloadHandler.text, "\"status\"") == "\"OK\"") {
                 GameData.userId = getString(www.downloadHandler.text, "\"userID\"");
-                Debug.Log("userId " + GameData.userId);
                 yield return getUnitData("nightborne", GameData.userId);
                 yield return getUnitData("necromancer", GameData.userId);
-                Debug.Log(GameData.Party_ActiveParty.Count);
                 GameObject.FindGameObjectWithTag("MapScreenMusic").GetComponent<MusicPlayer>().playMusic();
                 SceneManager.LoadScene("MapScene");
             } else {
@@ -104,7 +101,6 @@ public class UtilsServer : MonoBehaviour {
         }
         else {
             currentLvlString = getString(www.downloadHandler.text, "\"currentLVL\"");
-            Debug.Log(currentLvlString);
             currentLvl = Int32.Parse(currentLvlString);
             currentXPString = getString(www.downloadHandler.text, "\"currentXP\"");
             currentXP = Int32.Parse(currentXPString);
