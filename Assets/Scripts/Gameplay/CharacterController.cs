@@ -15,6 +15,8 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private int baseRange;
     [SerializeField] private int BattleOrder;
 
+    [SerializeField] private AudioSource attackSound, deathSound;
+
     public int currentHP;
     public int currentMP;
     public int currentATK;
@@ -96,6 +98,15 @@ public class CharacterController : MonoBehaviour
                     break;
                 case CharacterState.hurt:
                     playerAnim.SetBool("Attacking", false);
+                    if (side == Side.player) {
+                        if (BattleManager.Instance.currentTurn == side && orderPosition == 0 && BattleManager.Instance.enemyUnits[0].characterState == CharacterState.hurt) {
+                            changeState(CharacterState.attacking);
+                        }
+                    } else {
+                        if (BattleManager.Instance.currentTurn == side && orderPosition == 0 && BattleManager.Instance.playerUnits[0].characterState == CharacterState.hurt) {
+                            changeState(CharacterState.attacking);
+                        }
+                    }
                     break;
                 case CharacterState.waiting:
                     break;
@@ -161,6 +172,7 @@ public class CharacterController : MonoBehaviour
     {
         currentHP -= dmg;
         if (currentHP <= 0) {
+            currentHP = 0;
             changeState(CharacterState.dead);
         } else {
             playerAnim.SetBool("Hurt", true);
@@ -183,6 +195,7 @@ public class CharacterController : MonoBehaviour
     }
 
     public void Attack() {
+        attackSound.Play();
         playerAnim.SetBool("Attacking", false);
         if (side == Side.player) {
             BattleManager.Instance.enemyUnits[0].takeDMG(currentATK);
@@ -198,6 +211,10 @@ public class CharacterController : MonoBehaviour
             BattleManager.Instance.removeEnemyUnit(this);
         }
         UnityEngine.Object.Destroy(gameObject);
+    }
+
+    void DeathSFX() {
+        deathSound.Play();
     }
 
     public void setStats() {

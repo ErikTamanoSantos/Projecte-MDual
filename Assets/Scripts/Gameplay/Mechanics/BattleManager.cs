@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 
 public class BattleManager : MonoBehaviour
@@ -11,12 +13,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField] public List<GameObject> playerPositions = new List<GameObject>();
     public List<CharacterController> playerUnits = new List<CharacterController>();
     [SerializeField] public List<TextMeshProUGUI> playerHPBars = new List<TextMeshProUGUI>();
-    [SerializeField] public List<GameObject> playerHPIcons = new List<GameObject>();
+    [SerializeField] public List<Image> playerHPIcons = new List<Image>();
 
     [SerializeField] public List<GameObject> enemyPositions = new List<GameObject>();
     [SerializeField] public List<CharacterController> enemyUnits = new List<CharacterController>();
     [SerializeField] public List<TextMeshProUGUI> enemyHPBars = new List<TextMeshProUGUI>();
-    [SerializeField] public List<GameObject> enemyHPIcons = new List<GameObject>();
+    [SerializeField] public List<Image> enemyHPIcons = new List<Image>();
 
     [SerializeField] private TextMeshProUGUI BattleEnd_Title, BattleEnd_Description;
 
@@ -54,8 +56,7 @@ public class BattleManager : MonoBehaviour
         BattleEnd_TitleBg.SetActive(false);
         BattleEnd_Title.enabled = false;
         BattleEnd_Description.enabled = false;
-        exit_button.enabled = false;
-        exit_button.onClick.AddListener(delegate {SceneManager.LoadScene(MapScene)});
+        exit_button.gameObject.SetActive(false);
         Instance = this;
         GameManager.OnGameStateChanged += OnGameStateChanged;
         Debug.Log(playerPositions.Count - playerUnits.Count);
@@ -75,11 +76,24 @@ public class BattleManager : MonoBehaviour
 
      void Update()
     {
-        for (int i = 0; i < playerUnits.Count; i++) {
-            if (playerUnits[i] != null) {
-                playerHPBars[i].text = "" + playerUnits[i].currentHP;
-            } else {
-                playerHPBars[i].text = "";
+        if (GameManager.Instance.State != GameState.BattleWon && GameManager.Instance.State != GameState.BattleLost) {
+            for (int i = 0; i < playerUnits.Count; i++) {
+                if (playerUnits[i] != null) {
+                    playerHPIcons[i].enabled = true;
+                    playerHPBars[i].text = "" + playerUnits[i].currentHP;
+                } else {
+                    playerHPBars[i].text = "";
+                    playerHPIcons[i].enabled = false;
+                }
+            }
+            for (int i = 0; i < enemyUnits.Count; i++) {
+                if (enemyUnits[i] != null) {
+                    enemyHPIcons[i].enabled = true;
+                    enemyHPBars[i].text = "" + enemyUnits[i].currentHP;
+                } else {
+                    enemyHPIcons[i].enabled = false;
+                    enemyHPBars[i].text = "";
+                }
             }
         }
     }
@@ -100,20 +114,58 @@ public class BattleManager : MonoBehaviour
                 for (int i = 0; i < playerHPBars.Count; i++) {
                     playerHPBars[i].enabled = false;
                 }
-                exit_button.enable = true;
+                for (int i = 0; i < playerHPIcons.Count; i++) {
+                    playerHPIcons[i].enabled = false;
+                }
+                for (int i = 0; i < enemyHPBars.Count; i++) {
+                    enemyHPBars[i].enabled = false;
+                }
+                for (int i = 0; i < enemyHPIcons.Count; i++) {
+                    enemyHPIcons[i].enabled = false;
+                }
+                exit_button.gameObject.SetActive(true);
                 BattleEnd_bg.SetActive(true);
                 BattleEnd_TitleBg.SetActive(true);
                 BattleEnd_Title.enabled = true;
                 BattleEnd_Description.enabled = true;
                 for (int i = 0; i < playerUnits.Count; i++) {
                     if (playerUnits[i] != null) {
-                        BattleEnd_Description.text += playerUnits[i].data.name + " gained 10 XP\n";
+                        playerUnits[i].data.currentXP += 10;
+                        if (playerUnits[i].data.currentXP >= 100) {
+                            playerUnits[i].data.currentXP -= 100;
+                            playerUnits[i].data.currentLvl++;
+                            BattleEnd_Description.text += playerUnits[i].data.name + " leveled up!\n";
+                        } else {
+                            BattleEnd_Description.text += playerUnits[i].data.name + " gained 10 XP\n";   
+                        }
+                        Debug.Log("EXP: " + playerUnits[i].data.currentLvl + " " + playerUnits[i].data.currentXP);
                     }
                 }
+                GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] = MapTileType.walkable;
+                exit_button.onClick.AddListener(delegate{saveAndReturnToMap();});
                 //SceneManager.LoadScene("MapScene");
                 break;
             case GameState.BattleLost:
-                BattleEnd_Description.text = "DEFEAT!";
+                BattleEnd_Title.text = "DEFEAT!";
+                for (int i = 0; i < playerHPBars.Count; i++) {
+                    playerHPBars[i].enabled = false;
+                }
+                for (int i = 0; i < playerHPIcons.Count; i++) {
+                    Debug.Log("ICON");
+                    playerHPIcons[i].enabled = false;
+                }
+                for (int i = 0; i < enemyHPBars.Count; i++) {
+                    enemyHPBars[i].enabled = false;
+                }
+                for (int i = 0; i < enemyHPIcons.Count; i++) {
+                    enemyHPIcons[i].enabled = false;
+                }
+                exit_button.gameObject.SetActive(true);
+                BattleEnd_bg.SetActive(true);
+                BattleEnd_TitleBg.SetActive(true);
+                BattleEnd_Title.enabled = true;
+                BattleEnd_Description.enabled = true;
+                exit_button.onClick.AddListener(delegate{GameObject.FindGameObjectWithTag("StartScreenMusic").GetComponent<MusicPlayer>().playMusic(); SceneManager.LoadScene("LoginScene");});
                 //SceneManager.LoadScene("MapScene");
                 break;
         }
@@ -238,6 +290,17 @@ public class BattleManager : MonoBehaviour
         }
         playerUnits[0].changeState(CharacterState.standby);
         enemyUnits[0].changeState(CharacterState.standby);
+    }
+
+    void saveAndReturnToMap() {
+        GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();
+        for (int i = 0; i < playerUnits.Count; i++) {
+            if (playerUnits[i] != null) {
+                StartCoroutine(UtilsServer.saveUnitData(playerUnits[i].data.name, GameData.userId, playerUnits[i].data.currentXP, playerUnits[i].data.currentLvl));
+            }
+        }
+        GameObject.FindGameObjectWithTag("MapScreenMusic").GetComponent<MusicPlayer>().playMusic();
+        SceneManager.LoadScene("MapScene");
     }
 
 }

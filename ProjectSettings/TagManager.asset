@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - StartScreenMusic
+  - BattleScreenMusic
+  - MapScreenMusic
+  - clickSound
   layers:
   - Default
   - TransparentFX

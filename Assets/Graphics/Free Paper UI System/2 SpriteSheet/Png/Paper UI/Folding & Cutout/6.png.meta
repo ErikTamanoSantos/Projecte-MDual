@@ -188,7 +188,7 @@ TextureImporter:
         width: 416
         height: 189
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -196,6 +196,27 @@ TextureImporter:
       bones: []
       spriteID: c67e0698aa793f94785a374d6c3a8607
       internalID: 1782836419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Party_bg
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 3520
+        width: 384
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f36ab946d7f6fb145b92e88eca40c1d6
+      internalID: 940452043
       vertices: []
       indices: 
       edges: []
@@ -213,6 +234,7 @@ TextureImporter:
     nameFileIdTable:
       6_1: 386789265
       Map Paper: 1822226711
+      Party_bg: 940452043
       BattleEnd Title: 1782836419
       Table: 678369127
       Map Title: -2043590774

@@ -13,7 +13,6 @@ public class StartButtonTextController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CharacterController.isBeingDragged += onDraggedStatusChange;
     }
 
     // Update is called once per frame

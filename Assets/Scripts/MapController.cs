@@ -15,11 +15,11 @@ public class MapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        buttonUp.onClick.AddListener(delegate {GridMap.Instance.move(Directions.up);});
-        buttonDown.onClick.AddListener(delegate {GridMap.Instance.move(Directions.down);});
-        buttonLeft.onClick.AddListener(delegate {GridMap.Instance.move(Directions.left);});
-        buttonRight.onClick.AddListener(delegate {GridMap.Instance.move(Directions.right);});
-        buttonMenu.onClick.AddListener(delegate {SceneManager.LoadScene("MenuScene");});
+        buttonUp.onClick.AddListener(delegate {GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();GridMap.Instance.move(Directions.up);});
+        buttonDown.onClick.AddListener(delegate {GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();GridMap.Instance.move(Directions.down);});
+        buttonLeft.onClick.AddListener(delegate {GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();GridMap.Instance.move(Directions.left);});
+        buttonRight.onClick.AddListener(delegate {GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();GridMap.Instance.move(Directions.right);});
+        buttonMenu.onClick.AddListener(delegate {GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();SceneManager.LoadScene("MenuScene");});
     }
 
     // Update is called once per frame

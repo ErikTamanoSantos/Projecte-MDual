@@ -12,7 +12,6 @@ public class StartButtonController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CharacterController.isBeingDragged += onDraggedStatusChange;
         Button btn = GetComponent<Button>();
 		btn.onClick.AddListener(onClick);
     }
@@ -57,6 +56,7 @@ public class StartButtonController : MonoBehaviour
     }
 
     void onClick() {
+        GameObject.FindGameObjectWithTag("clickSound").GetComponent<ButtonClickSound>().playSound();
         GameManager.Instance.State = GameState.BattleStarted;
         GetComponent<Button>().gameObject.SetActive(false);
     }

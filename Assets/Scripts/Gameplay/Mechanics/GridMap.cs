@@ -11,13 +11,16 @@ public class GridMap : MonoBehaviour
     [SerializeField] private Transform cam;
     [SerializeField] private GameObject character;
     [SerializeField] private TextMeshProUGUI levelLabel;
+    [SerializeField] private GameObject battleIcon, nextIcon;
     public static GridMap Instance;
 
     void Awake() {
+        if (GameData.Map_CurrentLayout == null) {
+            GameData.generateRandomMapLayout();
+        }
         Instance = this;
         GenerateGrid();
-        character.transform.position = new Vector3(GameData.Map_CharacterPos.x, GameData.Map_CharacterPos.y, -1);
-        StartCoroutine(UtilsServer.Upload());
+        character.transform.position = new Vector3(GameData.Map_CharacterPos.x, GameData.Map_CharacterPos.y, character.transform.position.z);
         
     }
 
@@ -31,9 +34,14 @@ public class GridMap : MonoBehaviour
                 if (GameData.Map_CurrentLayout[x, y] != MapTileType.blocked) {
                     var spawnedTile = Instantiate(tilePrefab, new Vector3(x, y), Quaternion.identity);
                     spawnedTile.name = $"Tile {x} {y}";
-
-
                     spawnedTile.setPosition(new Vector2(x, y));
+                    if (GameData.Map_CurrentLayout[x, y] == MapTileType.battle) {
+                         var icon = Instantiate(battleIcon, new Vector3(x, y), Quaternion.identity);
+                         icon.transform.position = new Vector2(x, y);
+                    } else if (GameData.Map_CurrentLayout[x, y] == MapTileType.next_level) {
+                         var icon = Instantiate(nextIcon, new Vector3(x, y), Quaternion.identity);
+                         icon.transform.position = new Vector2(x, y);
+                    }
                 }
             }
         }
@@ -79,9 +87,16 @@ public class GridMap : MonoBehaviour
 
         Debug.Log("x " +GameData.Map_CharacterPos.x);
         Debug.Log("y " +GameData.Map_CharacterPos.y);
+        Debug.Log(GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y]);
 
         if (GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] == MapTileType.battle) {
+            GameObject.FindGameObjectWithTag("BattleScreenMusic").GetComponent<MusicPlayer>().playMusic();
             SceneManager.LoadScene("BattleScene");
+        } else if (GameData.Map_CurrentLayout[(int) GameData.Map_CharacterPos.x, (int) GameData.Map_CharacterPos.y] == MapTileType.next_level) {
+            GameData.currentLevel++;
+            GameData.generateRandomMapLayout();
+            Debug.Log("asdassadasd");
+            SceneManager.LoadScene("MapScene");
         }
     }
 }
