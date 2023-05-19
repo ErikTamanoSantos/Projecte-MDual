@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
  
 public class UtilsServer : MonoBehaviour {
 
-    static string address = "http://localhost:3000/dades";
-    // static string address = "https://neighborly-sand-production.up.railway.app:443/dades";
+    // static string address = "http://localhost:3000/dades";
+    static string address = "https://neighborly-sand-production.up.railway.app:443/dades";
 
     static string currentLvlString, currentXPString;
     static int currentLvl, currentXP;
