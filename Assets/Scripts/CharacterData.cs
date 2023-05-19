@@ -23,6 +23,9 @@ public class CharacterData
     public ChestEquipment chestEquipment;
     public LegsEquipment legsEquipment;
     public FeetEquipment feetEquipment;
+
+    public string skill_name;
+    public string skill_desc;
     
 
     public CharacterData(string name, int currentLvl, int currentXP) {
@@ -37,5 +40,19 @@ public class CharacterData
         this.currentXP = currentXP;
         this.currentLvl = currentLvl;
         this.currentHP = this.maxHP;
+        if (name == "nightborne") {
+            skill_name = "Energy Drain";
+        } else {
+            skill_name = "Soul Burst";
+        }
+        resetSkillDesc();
+    }
+
+    public void resetSkillDesc() {
+        if (name == "nightborne") {
+            skill_desc = "The Nightborne drains his enemy's lifeforce on every 3rd attack, healing themselves " + baseMAG/3 + " HP.";
+        } else {
+            skill_desc = "The Necromancer casts down a burst of dark energy on every 4th attack, dealing " + baseMAG + " bonus damage.";
+        }
     }
 }

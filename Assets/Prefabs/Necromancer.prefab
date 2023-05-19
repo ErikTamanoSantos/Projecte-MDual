@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1087237617972100870}
   - component: {fileID: 1087237617737899134}
   - component: {fileID: 1087237617737899133}
-  - component: {fileID: 1087237617737899132}
+  - component: {fileID: 6618761541887900814}
   m_Layer: 0
   m_Name: Necromancer
   m_TagString: Untagged
@@ -193,7 +193,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1087237617737899132
+--- !u!114 &6618761541887900814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,16 +202,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1087237617737899107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a6774c33f2f0941a7544076dc9c3b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 7695ebc4e618eef409b0604cbbbe57dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
-  maxMP: 10
-  baseATK: 10
-  baseMAG: 10
-  baseATKSPD: 10
-  baseMOVSPD: 10
-  baseRange: 10
+  maxHP: 0
+  maxMP: 0
+  baseATK: 0
+  baseMAG: 0
+  baseATKSPD: 0
+  baseMOVSPD: 0
+  baseRange: 0
   BattleOrder: 0
   attackSound: {fileID: 188239943546883698}
   deathSound: {fileID: 5512838063559362469}
@@ -223,7 +223,7 @@ MonoBehaviour:
   currentMOVSPD: 0
   currentRange: 0
   characterState: 0
-  side: 1
+  side: 0
   orderPosition: 0
 --- !u!1 &2708060105769220766
 GameObject:
@@ -396,7 +396,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a424a68fa1283a740a5cfaea230563ad, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

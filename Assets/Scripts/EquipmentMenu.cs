@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class EquipmentMenu : MonoBehaviour
 {
     private int currentPage = 0;
-    [SerializeField] private TextMeshProUGUI name, lvl, hp, atk, mag, xp, spd;
+    [SerializeField] private TextMeshProUGUI name, lvl, hp, atk, mag, xp, spd, skill_name, skill_desc;
     [SerializeField] private Button button_return, button_prev, button_next;
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,8 @@ public class EquipmentMenu : MonoBehaviour
         mag.text = "" +GameData.Party_ActiveParty[currentPage].baseMAG;
         xp.text = "" +GameData.Party_ActiveParty[currentPage].currentXP;
         spd.text = "" +GameData.Party_ActiveParty[currentPage].baseATKSPD;
+        skill_name.text = GameData.Party_ActiveParty[currentPage].skill_name;
+        skill_desc.text= GameData.Party_ActiveParty[currentPage].skill_desc;
     }
 
     void prevPage() {

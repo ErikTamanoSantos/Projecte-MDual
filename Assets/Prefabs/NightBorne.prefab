@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1258150305692323076}
   - component: {fileID: 1258150305692323077}
   - component: {fileID: 1258150305692323078}
-  - component: {fileID: 1258150305692323079}
+  - component: {fileID: -3996818653821598536}
   m_Layer: 0
   m_Name: NightBorne
   m_TagString: Untagged
@@ -108,7 +108,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1258150305692323079
+--- !u!114 &-3996818653821598536
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,16 +117,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1258150305692323072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a6774c33f2f0941a7544076dc9c3b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b98c222debc25e40ac63b589ab6b314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 10
-  maxMP: 10
-  baseATK: 10
-  baseMAG: 10
-  baseATKSPD: 10
-  baseMOVSPD: 10
-  baseRange: 10
+  maxHP: 0
+  maxMP: 0
+  baseATK: 0
+  baseMAG: 0
+  baseATKSPD: 0
+  baseMOVSPD: 0
+  baseRange: 0
   BattleOrder: 0
   attackSound: {fileID: 1729590035743615271}
   deathSound: {fileID: 2278028351761275699}

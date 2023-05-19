@@ -221,6 +221,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: 6_0
+      rect:
+        serializedVersion: 2
+        x: 1616
+        y: 3792
+        width: 224
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a26b0f263339ace4a8a34f3cfb50071b
+      internalID: -1025012524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -236,6 +257,7 @@ TextureImporter:
       Map Paper: 1822226711
       Party_bg: 940452043
       BattleEnd Title: 1782836419
+      6_0: -1025012524
       Table: 678369127
       Map Title: -2043590774
   spritePackingTag: 

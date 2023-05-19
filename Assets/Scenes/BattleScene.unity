@@ -3440,6 +3440,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &465754715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -3996818653821598536, guid: e626664ede7ce9c4abe8f86e6812eca0, type: 3}
+  m_PrefabInstance: {fileID: 1545437766}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b98c222debc25e40ac63b589ab6b314, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &488344018
 GameObject:
   m_ObjectHideFlags: 0
@@ -7933,17 +7944,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 983514959}
   m_CullTransparentMesh: 1
---- !u!114 &1020317282 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1258150305692323079, guid: e626664ede7ce9c4abe8f86e6812eca0, type: 3}
-  m_PrefabInstance: {fileID: 1545437766}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a6774c33f2f0941a7544076dc9c3b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1028160464
 GameObject:
   m_ObjectHideFlags: 0
@@ -8608,7 +8608,7 @@ MonoBehaviour:
   - {fileID: 900289076}
   - {fileID: 1642338216}
   enemyUnits:
-  - {fileID: 1020317282}
+  - {fileID: 465754715}
   enemyHPBars:
   - {fileID: 557968677}
   - {fileID: 675571830}
@@ -11254,6 +11254,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3996818653821598536, guid: e626664ede7ce9c4abe8f86e6812eca0, type: 3}
+      propertyPath: side
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1258150305692323072, guid: e626664ede7ce9c4abe8f86e6812eca0, type: 3}
       propertyPath: m_Name
       value: NightBorne (1)

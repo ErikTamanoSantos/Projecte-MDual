@@ -134,6 +134,7 @@ public class BattleManager : MonoBehaviour
                         if (playerUnits[i].data.currentXP >= 100) {
                             playerUnits[i].data.currentXP -= 100;
                             playerUnits[i].data.currentLvl++;
+                            playerUnits[i].data.resetSkillDesc();
                             BattleEnd_Description.text += playerUnits[i].data.name + " leveled up!\n";
                         } else {
                             BattleEnd_Description.text += playerUnits[i].data.name + " gained 10 XP\n";   

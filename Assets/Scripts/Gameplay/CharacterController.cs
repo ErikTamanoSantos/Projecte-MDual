@@ -15,7 +15,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private int baseRange;
     [SerializeField] private int BattleOrder;
 
-    [SerializeField] private AudioSource attackSound, deathSound;
+    [SerializeField] protected AudioSource attackSound, deathSound;
 
     public int currentHP;
     public int currentMP;
@@ -44,7 +44,7 @@ public class CharacterController : MonoBehaviour
 
     private bool isPressed = false;
 
-    private Animator playerAnim;
+    protected Animator playerAnim;
 
     private float lastPositionX, lastPositionY;
     
@@ -156,7 +156,7 @@ public class CharacterController : MonoBehaviour
         
     }
 
-    public void changeState(CharacterState newState) 
+    public virtual void changeState(CharacterState newState) 
     {
         if (this.characterState != newState) {
             if (this.side == Side.enemy) {
